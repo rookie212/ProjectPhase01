@@ -125,6 +125,25 @@ app.post("/api/allrestaurants/insert", (req, res) => {
         });
     });
 });
+
+//get all restaurant data from db
+app.get('/api/restaurants', function(req, res) {
+    console.log('12:get ---/api/restaurants here');
+
+    // use mongoose to get all todos in the database
+    Restaurant.find(function(err, restaurants) {
+        // if there is an error retrieving, send the error otherwise send data
+        if (err)
+            res.send(err)
+        console.log('13');
+
+        res.json(restaurants); // return all restaurants in JSON format
+        let a = req.body;
+        console.log('14:User sees that' + a);
+        console.log(a);
+    });
+    console.log('15:This one is in the same place with 12 but there are some functions');
+});
 // get a restaurant with ID of 1
 app.get('/api/restaurants/:_id', function(req, res) {
     console.log('16:User made a search with _id');
@@ -139,6 +158,7 @@ app.get('/api/restaurants/:_id', function(req, res) {
     });
     console.log('18:This one is in the same place with 16 but there are some functions');
 });
+
 // create restaurant and send back all restaurants after creation
 app.post('/api/restaurants', function(req, res) {
     console.log('19:Here post process started');
@@ -201,6 +221,8 @@ app.put('/api/restaurants/:id', function(req, res) {
         console.log('29: Succesful message sent the browser');
 
     });
+    //dataset.updateRestaurant(data);
+    //res.status(200).("")
     console.log('30:This one is in the same place with 25 but there are some functions');
 
 });

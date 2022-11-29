@@ -16,11 +16,8 @@ console.log('5:Body-parser imported');
 var port = process.env.PORT || 8000;
 console.log('6:Port id defined');
 
-<<<<<<< HEAD
-app.use(bodyParser.urlencoded({'extended':'false'}));            // parse application/x-www-form-urlencoded
-=======
 app.use(bodyParser.urlencoded({ 'extended': 'true' })); // parse application/x-www-form-urlencoded
->>>>>>> refs/remotes/origin/main
+
 // console.log('7:Body-parser accepts only urlencoded');
 
 app.use(bodyParser.json()); // parse application/json
@@ -83,7 +80,6 @@ app.get('/api/restaurants/:page/:perPage/:borough?', function(req, res) {
 var path = require("path");
 console.log('10:Path is imported');
 
-<<<<<<< HEAD
 const exphbs = require("express-handlebars");
 console.log('11:Handlebars is imported');
 
@@ -99,36 +95,36 @@ console.log('14:Template engine is configures as hbs');
 
 //form and insert
 app.get("/api/allrestaurants/insert", (req, res) => {
-	console.log('22:form and insert started ');
+    console.log('22:form and insert started ');
 
     res.render("insert", { name: null, id: null });
-  });
-  
-  app.post("/api/allrestaurants/insert", (req, res) => {
+});
+
+app.post("/api/allrestaurants/insert", (req, res) => {
     console.log(req.body.name);
     console.log(req.body.cuisine);
     console.log(req.body.borough);
     console.log(req.body.id);
-	console.log('23:Above content is submitted');
-    
+    console.log('23:Above content is submitted');
+
     Restaurant.insertMany({
-		name : req.body.name,
-		cuisine : req.body.cuisine,
-		borough : req.body.borough,
-        restaurant_id : req.body.id
-	    }, function(err, rests) {
-		if (err)
-			res.send(err);
-			console.log('24: Just right now new entry created');
-		// get and return all the restaurant after newly created employe record
-        Restaurant.findOne({restaurant_id : req.body.id},function(err, rests) {
-			if (err)
-				res.send(err)
-				console.log('25: Right now find restaurant in mongoose');
-                res.render("insertresult", { data: [rests] });
-		});
-	});
-=======
+        name: req.body.name,
+        cuisine: req.body.cuisine,
+        borough: req.body.borough,
+        restaurant_id: req.body.id
+    }, function(err, rests) {
+        if (err)
+            res.send(err);
+        console.log('24: Just right now new entry created');
+        // get and return all the restaurant after newly created employe record
+        Restaurant.findOne({ restaurant_id: req.body.id }, function(err, rests) {
+            if (err)
+                res.send(err)
+            console.log('25: Right now find restaurant in mongoose');
+            res.render("insertresult", { data: [rests] });
+        });
+    });
+});
 // get a restaurant with ID of 1
 app.get('/api/restaurants/:_id', function(req, res) {
     console.log('16:User made a search with _id');
@@ -170,7 +166,6 @@ app.post('/api/restaurants', function(req, res) {
         console.log('23:This one is in the same place with 21 but there are some functions');
     });
     console.log('24:This one is in the same place with 19 but there are some functions');
->>>>>>> refs/remotes/origin/main
 });
 
 

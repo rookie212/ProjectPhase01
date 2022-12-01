@@ -7,7 +7,7 @@ console.log('2:Mongoose imported ');
 var app = express();
 console.log('3:app is expressed');
 
-var database = require('./config/db');
+var database = require('./config/dataset');
 console.log('4:Config directory Database file is reached');
 
 var bodyParser = require('body-parser'); // pull information from HTML POST (express4)
@@ -18,65 +18,14 @@ console.log('6:Port id defined');
 
 app.use(bodyParser.urlencoded({ 'extended': 'true' })); // parse application/x-www-form-urlencoded
 
-// console.log('7:Body-parser accepts only urlencoded');
-
 app.use(bodyParser.json()); // parse application/json
-// console.log('8:Body-parser.urlencoded accepts only JSON');
 
 app.use(bodyParser.json({ type: 'application/vnd.api+json' })); // parse application/vnd.api+json as json
-// console.log('9:Body-parser type is application/vnd.api+json');
 
-
-
-mongoose.connect(database.url);
-console.log('10:Mongoose is connected');
+//mongoose.connect(database.url);
 
 var Restaurant = require('./models/restaurant');
-console.log('11:Models directory restaurant file is reached');
-
-
-//get all restaurant data from db
-app.get('/api/restaurants/:page/:perPage/:borough?', function(req, res) {
-    console.log('new api/restaurants with pages here');
-    let page = req.params.page;
-    let perPage = req.params.perPage;
-    let borough = req.params.borough;
-
-    if (borough) {
-        Restaurant.find({
-            "borough": { $eq: borough }
-        }, function(err, restaurant) {
-            if (err)
-                res.send(err);
-            let end = page * perPage;
-            let result = [];
-            for (let i = perPage; i > 0; i--) {
-                console.log("i=" + i);
-                console.log("getting restaurant[" + end + "] with borough=" + borough);
-                result.push(restaurant[end]);
-                end -= 1;
-            }
-            res.json(result);
-        });
-    } else { // use mongoose to get all todos in the database
-        Restaurant.find(function(err, restaurants) {
-            // if there is an error retrieving, send the error otherwise send data
-            if (err)
-                res.send(err)
-            let end = page * perPage;
-            let result = [];
-            for (let i = perPage; i > 0; i--) {
-                console.log("i=" + i);
-                console.log("getting restaurant[" + end + "]");
-                result.push(restaurants[end]);
-                end -= 1;
-            }
-            res.json(result);
-
-        });
-    }
-
-});
+database.initialize();
 var path = require("path");
 console.log('10:Path is imported');
 
@@ -97,7 +46,10 @@ console.log('14:Template engine is configures as hbs');
 app.get("/api/allrestaurants/insert", (req, res) => {
     console.log('22:form and insert started ');
 
-    res.render("insert", { name: null, id: null });
+    res.render("insert", {
+        title: "New Restaurant",
+        id: null
+    });
 });
 
 app.post("/api/allrestaurants/insert", (req, res) => {
@@ -121,7 +73,10 @@ app.post("/api/allrestaurants/insert", (req, res) => {
             if (err)
                 res.send(err)
             console.log('25: Right now find restaurant in mongoose');
-            res.render("insertresult", { data: [rests] });
+            res.render("insertresult", {
+                title: "Search Result",
+                data: rests
+            });
         });
     });
 });
@@ -154,11 +109,51 @@ app.get('/api/restaurants/:_id', function(req, res) {
             res.send(err)
         console.log('17: JSON sent it to the browser');
 
-        res.json(restaurant);
+        res.status(200).json(restaurant);
     });
     console.log('18:This one is in the same place with 16 but there are some functions');
 });
 
+//get restaurant data from db
+app.get('/api/restaurants/:page/:perPage/:borough?', function(req, res) {
+    console.log('new api/restaurants with pages here');
+    let page = req.params.page;
+    let perPage = req.params.perPage;
+    let borough = req.params.borough;
+
+    if (borough) {
+        Restaurant.find({
+            "borough": { $eq: borough }
+        }, function(err, restaurant) {
+            if (err)
+                res.send(err);
+            let end = page * perPage;
+            let result = [];
+            for (let i = perPage; i > 0; i--) {
+                result.push(restaurant[end]);
+                end -= 1;
+            }
+            res.json(result);
+        });
+    } else { // use mongoose to get all todos in the database
+        Restaurant.find(function(err, restaurants) {
+            // if there is an error retrieving, send the error otherwise send data
+            if (err)
+                res.send(err)
+            let end = page * perPage;
+            let result = [];
+            for (let i = perPage; i > 0; i--) {
+                console.log("i=" + i);
+                console.log("getting restaurant[" + end + "]");
+                result.push(restaurants[end]);
+                end -= 1;
+            }
+            res.json(result);
+
+        });
+    }
+
+});
 // create restaurant and send back all restaurants after creation
 app.post('/api/restaurants', function(req, res) {
     console.log('19:Here post process started');

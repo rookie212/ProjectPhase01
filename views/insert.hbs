@@ -1,3 +1,4 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript">
   $("#addGrade").click(function () {
     console.log("counter=" + counter);
@@ -8,17 +9,18 @@
 
     var newGradeDiv = $(document.createElement('div'))
       .attr("id", 'GradeDiv' + counter);
-
-    newGradeDiv.after().html('<label>Date:</label> <input type="date" id="gdate' + counter + '" name="gdate' + counter +
+  var html='<label>Date:</label> <input type="date" id="gdate' + counter + '" name="gdate' + counter +
       '"><label>Grade #' + counter + ' : </label>' +
       '<input type="text" name="grade' + counter +
-      '" id="grade' + counter + '" value="" ><label>Score #' + counter + ': </label><input type="textbox" id="score' + counter + '" >');
+      '" id="grade' + counter + '" value="" ><label>Score #' + counter + ': </label><input type="textbox" id="score' + counter + '" >';
+    newGradeDiv.after().html(html);
 
-    newGradeDiv.appendTo("#GradesGroup");
+   $("#GradesGroup").append(html);
 
     counter++;
   });
 </script>
+
 <form method="POST" action="/api/allrestaurants/insert">
   <label for="Restaurant name: " </label>
     Name: <input type="text" name="name" placeholder="Enter Name" /></br>

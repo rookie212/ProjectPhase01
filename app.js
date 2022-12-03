@@ -244,11 +244,12 @@ app.delete('/api/restaurants/:id', function(req, res) {
     console.log('33:This one is in the same place with 31 but there are some functions');
 });
 
-app.get('/api/restaurants/filter/:page/:perPage/:borough?', function(req, res) {
+//filtering data and displaying result using template engine
+app.get('/api/filter/restaurants', function(req, res) {
     console.log('new filter api here');
-    let page = req.params.page;
-    let perPage = req.params.perPage;
-    let borough = req.params.borough;
+    let page = req.query.page;
+    let perPage = req.query.perPage;
+    let borough = req.query.borough;
 
     if (borough) {
         Restaurant.find({
@@ -259,8 +260,6 @@ app.get('/api/restaurants/filter/:page/:perPage/:borough?', function(req, res) {
             let end = page * perPage;
             let result = [];
             for (let i = perPage; i > 0; i--) {
-                console.log("i=" + i);
-                console.log("getting restaurant[" + end + "] with borough=" + borough);
                 result.push(restaurant[end]);
                 end -= 1;
             }
@@ -278,8 +277,6 @@ app.get('/api/restaurants/filter/:page/:perPage/:borough?', function(req, res) {
             let end = page * perPage;
             let result = [];
             for (let i = perPage; i > 0; i--) {
-                console.log("i=" + i);
-                console.log("getting restaurant[" + end + "]");
                 result.push(restaurants[end]);
                 end -= 1;
             }

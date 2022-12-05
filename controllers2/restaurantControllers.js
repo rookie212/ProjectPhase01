@@ -38,9 +38,9 @@ async function getAllRestaurants(req, res) {
 async function addNewRestaurant(req, res) {
     if (!req.body.name) {
         return res.status(400).json({ 'message': 'restaurant name is required' });
-
     }
     try {
+        console.log("adding data")
         const result = await Restaurant.create({
             // building: req.body.address.building,
             // coord: req.body.address.coord,

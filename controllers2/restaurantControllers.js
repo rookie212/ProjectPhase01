@@ -106,13 +106,12 @@ const updateRestaurantById = async function (req,res){
 }
 
 const deleteRestaurantById = async function(req, res){
-    if (!req?.body?.id) return res.status(400).json({ 'message': 'restaurant ID required.' });
+    if (!req.params.id) return res.status(400).json({ 'message': 'restaurant ID required.' });
 
-    const restaurant = await Restaurant.findById({_id : req.body.id}).exec();
+    const restaurant = await Restaurant.findByIdAndDelete(req.params.id).exec();
     if (!restaurant) {
         return res.status(204).json({ "message": `No restaurant matches ID ${req.body.id}.` });
     }
-    const result = await Restaurant.remove({ _id: req.body.id });
     res.send('Successfully! Restaurant has been Deleted.');
 }
  

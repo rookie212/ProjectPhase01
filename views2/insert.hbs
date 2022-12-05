@@ -1,0 +1,40 @@
+<script type="text/javascript">
+  $("#addGrade").click(function () {
+    console.log("counter=" + counter);
+    if (counter > 10) {
+      alert("Only 10 grades allowed");
+      return false;
+    }
+
+    var newGradeDiv = $(document.createElement('div'))
+      .attr("id", 'GradeDiv' + counter);
+
+    newGradeDiv.after().html('<label>Date:</label> <input type="date" id="gdate' + counter + '" name="gdate' + counter +
+      '"><label>Grade #' + counter + ' : </label>' +
+      '<input type="text" name="grade' + counter +
+      '" id="grade' + counter + '" value="" ><label>Score #' + counter + ': </label><input type="textbox" id="score' + counter + '" >');
+
+    newGradeDiv.appendTo("#GradesGroup");
+
+    counter++;
+  });
+</script>
+<form method="POST" action="/api/allrestaurants/insert">
+  <label for="Restaurant name: " </label>
+    Name: <input type="text" name="name" placeholder="Enter Name" /></br>
+    <label for="Cuisine: " </label>
+      Cuisine: <input type="text" name="cuisine" placeholder="Enter Cuisine" /></br>
+      <label for="Borough: " </label>
+        Borough: <input type="text" name="borough" placeholder="Enter Borough" /></br>
+        <label for="Restaurant_id: " </label>
+          Restaurant ID: <input type="text" name="id" placeholder="Enter ID" /></br>
+          <div id="GradesGroup">
+            <div id="GradeDiv1">Grades</br>
+              <label>Date:</label> <input type="date" id="gdate1" name="gdate1">
+              <label>Grade #1 : </label><input type='textbox' id='grade1'>
+              <label>Score #1 : </label><input type='textbox' id='score1'>
+            </div>
+          </div>
+          <input type="button" value="Add Grade" id="addGrade"></br>
+          <input type="submit" id="submit" />
+</form>

@@ -71,15 +71,17 @@ async function addNewRestaurant(req, res) {
 
 const getRestaurantById = async function (req, res) {
 
-    if (!req.params._id) {
+    if (!req?.params?.id) {
         return res.status(400).json({'message': 'Restaurant Mongoose _Id required'});
     }
 
-    const restaurant = await restaurant.findOne({ _id: req.params.id }).exec();
-    if (!restaurant) {
+    const restaurants = await Restaurant.findById(req.params.id).exec();
+    if (!restaurants) {
         return res.status(204).json({ "message": `No restaurant matches ID ${req.params.id}.` });
+        console.log(a);
+
     }
-    res.send(restaurant);
+    res.json(restaurants);
 }
 
 

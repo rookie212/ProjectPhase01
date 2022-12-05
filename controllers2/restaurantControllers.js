@@ -86,17 +86,21 @@ const getRestaurantById = async function (req, res) {
 
 
 const updateRestaurantById = async function (req,res){
-    if (!req?.body?.id) {
+    if (!req?.params?.id) {
         return res.status(400).json({ 'message': 'ID parameter is required.' });
     }
-    const restaurant = await Restaurant.findOne({_id: req.body.id}).exec();
-    if(!restaurant) {
-        return res.status(204).json({ "message": `No restaurant matches ID ${req.body.id}.` });
+    var data = {
+       
+        name: req.body.name,
+        restaurant_id: req.body.restaurant_id
     }
-    if (req.body?.name) restaurant.name = req.body.name;
-    if (req.body?.cuisine) restaurant.cuisine = req.body.cuisine;
-    const result = await restaurant.save();
-    res.send('Successfully! restaurant updated - ' + restaurant.name);
+    const restaurants = await Restaurant.findByIdAndUpdate(req.params.id, data)
+    .exec();
+    if(!restaurants) {
+        return res.status(204).json({ "message": `No restaurant matches ID ${req.params.id}.` });
+    }
+    const result = await restaurants.save();
+    res.json('Successfully! restaurant updated - ' + restaurants.name);
 
 
 }

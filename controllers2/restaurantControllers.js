@@ -1,11 +1,39 @@
 const Restaurant = require('../models2/restaurant');
 
 async function getAllRestaurants(req, res) {
-    
-    const restaurants = await Restaurant.find();
-    if (!restaurants) return res.status(204).json({ 'message': 'No resta found.' });
-    res.send(restaurants);
-} 
+    if (req.query.page) {
+        let page = req.query.page;
+        let perPage = req.query.perPage;
+        let restaurants;
+        console.log("page = " + page);
+        console.log("per page = " + perPage);
+        if (req.query.borough) {
+            let borough = req.query.borough;
+            console.log("Getting restaurants with borough :" + borough);
+            restaurants = await Restaurant.find({ "borough": { $eq: borough } });
+        } else {
+            console.log("Getting restaurants without borough");
+            restaurants = await Restaurant.find();
+        }
+        if (!restaurants) return res.status(204).json({ 'message': 'No resta found.' });
+        else {
+            let end = page * perPage;
+            let result = [];
+            for (let i = perPage; i > 0; i--) {
+                result.push(restaurants[end]);
+                end -= 1;
+            }
+            res.status(200).send(result);
+        }
+
+    } else {
+        console.log("In getAllRestaurants");
+        const restaurants = await Restaurant.find();
+        if (!restaurants) return res.status(204).json({ 'message': 'No resta found.' });
+        res.send(restaurants);
+    }
+
+}
 
 async function addNewRestaurant(req, res) {
     if (!req.body.name) {
@@ -30,49 +58,11 @@ async function addNewRestaurant(req, res) {
         console.error(err);
     }
 }
-// const getAllRestaurants = async function (req, res){
 
-//     let page = req.params.page;
-//     let perPage = req.params.perPage;
-//     let borough = req.params.borough;
+const getRestaurantById = async function(req, res) {
 
-//     if (borough) {
-//         const restaurants = await restaurant.find({"borough": {$eq: borough}
-//     }, function(err, restaurant){
-//         if (err) {
-//             res.send(err);
-//         }
-//         let end = page * perPage;
-//         let result = [];
-//         for (let i = perPage; i > 0; i--) {
-//             result.push(restaurant[end]);
-//             end -= 1;
-//         }
-//         res.json(result);
-//     });
-//     }else { // use mongoose to get all todos in the database
-//         restaurant.find(function(err, restaurants) {
-//             // if there is an error retrieving, send the error otherwise send data
-//             if (err)
-//                 res.send(err)
-//             let end = page * perPage;
-//             let result = [];
-//             for (let i = perPage; i > 0; i--) {
-//                 console.log("i=" + i);
-//                 console.log("getting restaurant[" + end + "]");
-//                 result.push(restaurants[end]);
-//                 end -= 1;
-//             }
-//             res.json(result);
-
-//         });
-//     }
-// }
-
-const getRestaurantById = async function (req, res) {
-
-    if (!req?.params?.id) {
-        return res.status(400).json({'message': 'Restaurant Mongoose _Id required'});
+    if (!req.params.id) {
+        return res.status(400).json({ 'message': 'Restaurant Mongoose _Id required' });
     }
 
     const restaurants = await Restaurant.findById(req.params.id).exec();
@@ -85,18 +75,18 @@ const getRestaurantById = async function (req, res) {
 }
 
 
-const updateRestaurantById = async function (req,res){
-    if (!req?.params?.id) {
+const updateRestaurantById = async function(req, res) {
+    if (!req.params.id) {
         return res.status(400).json({ 'message': 'ID parameter is required.' });
     }
     var data = {
-       
+
         name: req.body.name,
         restaurant_id: req.body.restaurant_id
     }
     const restaurants = await Restaurant.findByIdAndUpdate(req.params.id, data)
-    .exec();
-    if(!restaurants) {
+        .exec();
+    if (!restaurants) {
         return res.status(204).json({ "message": `No restaurant matches ID ${req.params.id}.` });
     }
     const result = await restaurants.save();
@@ -105,7 +95,7 @@ const updateRestaurantById = async function (req,res){
 
 }
 
-const deleteRestaurantById = async function(req, res){
+const deleteRestaurantById = async function(req, res) {
     if (!req.params.id) return res.status(400).json({ 'message': 'restaurant ID required.' });
 
     const restaurant = await Restaurant.findByIdAndDelete(req.params.id).exec();
@@ -114,11 +104,11 @@ const deleteRestaurantById = async function(req, res){
     }
     res.send('Successfully! Restaurant has been Deleted.');
 }
- 
+
 module.exports = {
-    addNewRestaurant, 
+    addNewRestaurant,
     getAllRestaurants,
-    getRestaurantById, 
+    getRestaurantById,
     updateRestaurantById,
     deleteRestaurantById
 };

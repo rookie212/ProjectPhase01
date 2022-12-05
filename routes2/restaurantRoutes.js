@@ -5,11 +5,11 @@ const restaurantsControllers = require('../controllers2/restaurantControllers');
 
 router.route('/')
 
-    .post(restaurantsControllers.addNewRestaurant)
+.post(restaurantsControllers.addNewRestaurant)
     .get(restaurantsControllers.getAllRestaurants);
-router.route('api/resta/:page&:perPage&:borough?')
+router.route('/filter/:page&:perPage&:borough?')
 
-    .get(restaurantsControllers.getAllRestaurants);
+.get(restaurantsControllers.getAllRestaurants);
 
 router.route('/:id')
     .get(restaurantsControllers.getRestaurantById)

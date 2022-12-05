@@ -1,4 +1,5 @@
 const express = require('express');
+const { data } = require('jquery');
 const router = express.Router();
 const restaurantsControllers = require('../controllers2/restaurantControllers');
 
@@ -24,6 +25,12 @@ router.route('/addRestaurant')
     })
     .post((req, res) => {
         console.log('Inserting new restaurant data from form');
-        restaurantsControllers.addNewRestaurant;
+        const result = restaurantsControllers.addNewRestaurant;
+        if (result.status === 201) {
+            res.render("insertresult", {
+                title: "New Restaurant Added",
+                data: result.body
+            });
+        }
     });
 module.exports = router;

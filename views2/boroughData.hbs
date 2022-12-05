@@ -1,0 +1,6 @@
+<table border="1">
+    <th>Address</th><th>Borough</th><th>Cuisine</th><th>Name</th><th>Restaurant ID</th>
+    {{#each data}}
+    <tr><td>{{this.address.street}}</td><td>{{this.borough}}</td><td>{{this.cuisine}}</td><td>{{this.name}}</td><td>{{this.restaurant_id}}</td></tr>
+    {{/each}}
+</table>

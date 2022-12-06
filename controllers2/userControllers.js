@@ -90,36 +90,16 @@ const tryingLogin = async function(req, res) {
             return res.status(204).render("register",
             { "title": "You are not a member please register" });
         }
-        User.pre("save",function (next){
-            const users = this
-            if (this.isModified("password") || this.isNew) {
-                bcrypt.genSalt(10, function (saltError, salt){
-                    if(saltError) {
-                        return next (saltError)
-                    }else {
-                        bcrypt.hash(users.password, salt, function(hashError, hash){
-                            if(hashError){
-                                return next(hashError)
-                            }
-                            users.password = hash
-                            next()
-                        })
-                    }
-                    })
-                }else {
-                    return next()
-                }
-            })
 
         if(checkEmails){
             const checkPasswords = await User.findOne({email: req.body.email, 
-                password: hash}).exec();
+                password: req.body.password}).exec();
 
                 if(!checkPasswords){
                     return res.status(204).render("login",
                     { "title": "Your password is wrong" });
                 }
-                // const sessionUser = {email: req.body.email, password: req.body.password}
+                const sessionUser = {email: req.body.email, password: req.body.password}
 
                 // req.session.sessionUser = {
                 //     email : loginmail,

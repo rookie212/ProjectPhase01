@@ -14,26 +14,26 @@ userSchema = new Schema({
 	age : Number
 });
 
-userSchema.pre("save",function (next){
-    const users = this
-    if (this.isModified("password") || this.isNew) {
-        bcrypt.genSalt(10, function (saltError, salt){
-            if(saltError) {
-                return next (saltError)
-            }else {
-                bcrypt.hash(users.password, salt, function(hashError, hash){
-                    if(hashError){
-                        return next(hashError)
-                    }
-                    users.password = hash
-                    next()
-                })
-            }
-            })
-        }else {
-            return next()
-        }
-    })
+// userSchema.pre("save",function (next){
+//     const users = this
+//     if (this.isModified("password") || this.isNew) {
+//         bcrypt.genSalt(10, function (saltError, salt){
+//             if(saltError) {
+//                 return next (saltError)
+//             }else {
+//                 bcrypt.hash(users.password, salt, function(hashError, hash){
+//                     if(hashError){
+//                         return next(hashError)
+//                     }
+//                     users.password = hash
+//                     next()
+//                 })
+//             }
+//             })
+//         }else {
+//             return next()
+//         }
+//     })
 
 
 console.log('User-3: Schema is created');

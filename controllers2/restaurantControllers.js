@@ -105,10 +105,52 @@ const deleteRestaurantById = async function(req, res) {
     res.send('Successfully! Restaurant has been Deleted.');
 }
 
+const getForm = async function (req,res){
+    res.render("insert", {
+        title:"add new restaurant"
+    })
+}
+
+const formAddingRestaurantById = async function (req, res){
+
+    if (!req.body.name) {
+        return res.status(400).json({ 'message': 'restaurant name is required' });
+    }
+    try {
+        console.log("adding data")
+        
+    await Restaurant.insertMany({
+        name: req.body.name,
+        cuisine: req.body.cuisine,
+        borough: req.body.borough,
+        restaurant_id: req.body.id
+    }, function(err, rests) {
+        if (err)
+            res.send(err);
+        console.log('24: Just right now new entry created');
+        // get and return all the restaurant after newly created employe record
+        Restaurant.findOne({ restaurant_id: req.body.id }, function(err, rests) {
+            if (err)
+                res.send(err)
+            console.log('25: Right now find restaurant in mongoose');
+            res.render("insertresult", {
+                title: "You saved a new restaurant",
+                data: rests
+            });
+        });
+    });
+    } catch (err) {
+        console.error(err);
+    }
+}
+
 module.exports = {
     addNewRestaurant,
     getAllRestaurants,
     getRestaurantById,
     updateRestaurantById,
-    deleteRestaurantById
+    deleteRestaurantById,
+
+getForm,
+    formAddingRestaurantById
 };

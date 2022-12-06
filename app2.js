@@ -16,6 +16,7 @@ app.use(bodyParser.json({ type: 'application/vnd.api+json' })); // parse applica
 //mongoose.connect(database.url);
 
 var Restaurant = require('./models2/restaurant');
+var User = require('./models2/user');
 
 var path = require("path");
 
@@ -29,6 +30,7 @@ app.set('view engine', 'hbs');
 db.initialize();
 
 //routes
+app.use('/new', require('./routes2/userRoutes'));
 app.use('/api/restaurants', require('./routes2/restaurantRoutes'));
 
 mongoose.connection.once('open', () => {

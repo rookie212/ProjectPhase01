@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 require('dotenv').config();
 // var database = require('./db');
 var Restaurant = require('../models2/restaurant');
+var User = require('../models2/user');
 
 async function initialize() {
 
